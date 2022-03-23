@@ -5,7 +5,8 @@ import { Icon, Col, Card, Row, Carousel } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import ImageSlider from '../../utils/ImageSlider';
 import CheckBox from './Sections/CheckBox';
-import { continents } from './Sections/Datas'
+import { continents, price } from './Sections/Datas'
+import RadioBox from './Sections/RadioBox';
 
 function LandingPage(props) {
 
@@ -13,6 +14,10 @@ function LandingPage(props) {
     const [Skip, setSkip] = useState(0)
     const [Limit, setLimit] = useState(2)
     const [PostSize, setPostSize] = useState(0)
+    const [Filters, setFilters] = useState({
+        continents: [],
+        price: []
+    })
 
     useEffect(() => {
 
@@ -68,8 +73,24 @@ function LandingPage(props) {
         </Col>
     })
 
-    const handleFilters = () => {
+    const showFilteredResults = (filters) => {
+        let body = {
+            sikp: 0,
+            limit: Limit,
+            filters: filters
+        }
         
+        getProducts(body)
+        setSkip(0)
+    }
+
+    const handleFilters = (filters, category) => {
+        const newFilters = {...Filters}
+
+        newFilters[category] = filters
+
+        showFilteredResults(newFilters)
+        setFilters(newFilters)
     }
     
     return (
@@ -79,11 +100,16 @@ function LandingPage(props) {
             </div>
 
             {/* Filter */}
-
-            {/* CheckBox */}
-            <CheckBox list={continents} handleFilters={filter => handleFilters(filters, "continents")}/>
-            {/* RadioBox */}
-
+            <Row gutter={[16, 16]}>
+                <Col lg={12} xs={24}>
+                    {/* CheckBox */}
+                    <CheckBox list={continents} handleFilters={filters => handleFilters(filters, "continents")}/>
+                </Col>
+                <Col lg={12} xs={24}>
+                    {/* RadioBox */}    
+                    <RadioBox list={price} handleFilters={filters => handleFilters(filters, "price")} />
+                </Col>
+            </Row>
             {/* Search */}
 
             {/* Cards */}
