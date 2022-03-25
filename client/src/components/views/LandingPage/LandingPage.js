@@ -7,6 +7,7 @@ import ImageSlider from '../../utils/ImageSlider';
 import CheckBox from './Sections/CheckBox';
 import { continents, price } from './Sections/Datas'
 import RadioBox from './Sections/RadioBox';
+import SearchFeature from './Sections/SearchFeature';
 
 function LandingPage(props) {
 
@@ -18,6 +19,7 @@ function LandingPage(props) {
         continents: [],
         price: []
     })
+    const [SearchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
 
@@ -84,13 +86,37 @@ function LandingPage(props) {
         setSkip(0)
     }
 
+    const handlePrice = (value) => {
+        const data = price;
+        let array = [];
+
+        for (let key in data) {
+            if(data[key]._id === parseInt(value, 10)) {
+                array = data[key].array;
+            }
+        }
+
+        return array;
+    }
+
     const handleFilters = (filters, category) => {
         const newFilters = {...Filters}
 
         newFilters[category] = filters
+        
+        console.log("filters=", filters)
+
+        if(category === "price") {
+            let priceValues = handlePrice(filters)
+            newFilters[category] = priceValues
+        }
 
         showFilteredResults(newFilters)
         setFilters(newFilters)
+    }
+
+    const updateSearchTerm = (newSearchTerm) => {
+        setSearchTerm(newSearchTerm)
     }
     
     return (
@@ -111,6 +137,12 @@ function LandingPage(props) {
                 </Col>
             </Row>
             {/* Search */}
+            <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '1rem auto' }}>
+                <SearchFeature
+                    refreshFunction={updateSearchTerm}
+                />
+            </div>
+            
 
             {/* Cards */}
 
