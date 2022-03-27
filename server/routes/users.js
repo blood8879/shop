@@ -78,7 +78,7 @@ router.post("/addToCart", auth, (req, res) => {
             let duplicate = false;
 
             userInfo.cart.forEach((item) => {
-                if(item._id === req.body.productId) {
+                if(item.id === req.body.productId) {
                     duplicate = true;
                 }
             })
@@ -90,7 +90,7 @@ router.post("/addToCart", auth, (req, res) => {
                     { $inc : { "cart.$.quantity": 1 } },
                     { new: true },
                     (err, userInfo) => {
-                        if(err) return res.status(400).json({ success: false, err })
+                        if(err) return res.status(400).json({ success: false, err });
                         res.status(200).send(userInfo.cart)
                     }
                 )

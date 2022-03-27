@@ -13,13 +13,9 @@ function DetailProductPage(props) {
     useEffect(() => {
         axios.get(`/api/product/products_by_id?id=${productId}&type=single`)
             .then(response => {
-                if(response.data.success) {
-                    console.log('data==', response.data)
-                    setProduct(response.data.product[0])
-                } else {
-                    alert('상세 정보 가져오기 실패')
-                }
+                setProduct(response.data[0])
             })
+            .catch(err => alert(err))
     },[])
 
   return (
